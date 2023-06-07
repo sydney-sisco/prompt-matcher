@@ -7,6 +7,4 @@ module.exports = (io) => {
       socket.emit('pong', `✅ ${Math.random()}`);
     });
   });
-
-  return io;
 }
