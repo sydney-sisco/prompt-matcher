@@ -66,3 +66,10 @@ Listens on [port 3001](http://localhost:3001)
 ### Dev dependencies
 
 - nodemon
+
+### Generating secrets
+
+For sessions you will need to define 2 env vars: `SESSION_SECRET` and `JWT_SECRET`. Generate random secrets using nodejs like this:
+```js
+crypto.randomBytes(64).toString('hex');
+```
