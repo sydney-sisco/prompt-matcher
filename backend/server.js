@@ -11,6 +11,8 @@ app.use(session({
   cookie: { secure: true }
 }));
 
+app.use("/", express.static(root, { etag: false, lastModified: false }));
+
 const path = require('path');
 const port = process.env.PORT || 3001
 const APP_NAME = process.env.APP_NAME || 'webapp-template'
