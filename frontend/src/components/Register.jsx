@@ -1,7 +1,9 @@
 import RegisterForm from "./RegisterForm";
 import api from "../apiService";
+import { useLocation } from "wouter";
 
 function Register() {
+  const [_, setLocation] = useLocation();
 
   const handleSubmit = async ({username, password}) => {
     // e.preventDefault();
