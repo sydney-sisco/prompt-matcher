@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { ApiTest } from './components/ApiTest'
 import { socket } from './utils/socket'
 import { SocketTest } from './components/SocketTest'
@@ -6,10 +6,18 @@ import { ConnectionState } from './components/ConnectionState'
 import futureLogo from '/future.svg'
 import './App.css'
 
+import { AuthContext } from './AuthProvider';
+import { Route, Switch, Link, useLocation } from "wouter";
+import Login from './components/Login';
+import Register from './components/Register';
+import Gate from './components/Gate';
+
 function App() {
   const [count, setCount] = useState(0)
 
   const [isConnected, setIsConnected] = useState(socket.connected);
+
+  const { isLoggedIn, token, logout, user } = useContext(AuthContext);
 
   useEffect(() => {
     function onConnect() {
@@ -51,6 +59,21 @@ function App() {
       <ApiTest />
       <SocketTest />
       <ConnectionState isConnected={ isConnected } />
+
+      <Switch>
+          <Route path="/login"><Login /></Route>
+          <Route path="/register"><Register /></Route>
+
+          {!isLoggedIn ?
+            <Route>
+              <Gate />
+            </Route>
+            :
+            <>
+              <Route path="/auth"></Route>
+            </>
+          }
+      </Switch>
     </>
   )
 }
