@@ -11,6 +11,7 @@ import { Route, Switch, Link, useLocation } from "wouter";
 import Login from './components/Login';
 import Register from './components/Register';
 import Gate from './components/Gate';
+import Logout from './components/Logout'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -70,7 +71,10 @@ function App() {
             </Route>
             :
             <>
-              <Route path="/auth"></Route>
+              <Route path="/auth">
+                You are logged in as {user.username}
+                <Logout />
+              </Route>
             </>
           }
       </Switch>

@@ -1,7 +1,10 @@
+import { useContext } from "react";
 import LoginForm from "./LoginForm";
 import api from "../apiService";
+import { AuthContext } from '../AuthProvider';
 
 function Login() {
+  const { login } = useContext(AuthContext);
 
   const handleSubmit = async ({ username, password }) => {
     // e.preventDefault();

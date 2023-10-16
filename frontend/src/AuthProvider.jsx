@@ -40,7 +40,7 @@ const AuthProvider = ({ children }) => {
   const login = (data) => {
     apiService.setToken(data.token);
     setToken(data.token);
-    setLocation("/");
+    setLocation("/auth");
   };
 
   const logout = () => {
