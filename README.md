@@ -73,3 +73,10 @@ For sessions you will need to define 2 env vars: `SESSION_SECRET` and `JWT_SECRE
 ```js
 crypto.randomBytes(64).toString('hex');
 ```
+
+### launching chrome in debug mode
+`flatpak run com.google.Chrome --remote-debugging-port=9222 --user-data-dir=remote-debug-profile`
+
+
+### launching firebase emulator
+`firebase emulators:start --project demo-test`
