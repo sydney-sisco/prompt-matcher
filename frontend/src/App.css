@@ -35,3 +35,49 @@
 .read-the-docs {
   color: #888;
 }
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  height: 90vh;
+}
+
+.image-column,
+.text-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  height: 90%;
+}
+
+.image-item {
+  max-height: 20%;
+  object-fit: contain;
+}
+
+.text-item {
+  font-size: 1rem;
+}
+
+.image-item,
+.text-item {
+  border: 1px solid transparent;
+  transition: border 300ms;
+  
+}
+
+.image-item:hover, .text-item:hover {
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
