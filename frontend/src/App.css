@@ -74,6 +74,10 @@ body {
   border: 2px solid red;
 }
 
+.text-item.matched {
+  border: 2px solid green;
+}
+
 .image-item,
 .text-item {
   border: 1px solid transparent;

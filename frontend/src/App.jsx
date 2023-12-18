@@ -14,6 +14,13 @@ function App() {
 
     if (clickedImage === clickedPrompt) {
       alert('You win!')
+      
+      // set prompt.matched = true
+      const tempPrompts = [...currentPrompts]
+      const matchedIndex = tempPrompts.findIndex(prompt => prompt === clickedPrompt)
+      tempPrompts[matchedIndex].matched = true
+      setCurrentPrompts(tempPrompts)
+
       setClickedImage(null)
       setClickedPrompt(null)
     } else {
@@ -31,8 +38,11 @@ function App() {
       const randomIndex = Math.floor(Math.random() * prompts.length)
       tempPrompts.push(prompts[randomIndex])
     }
+
+    tempPrompts.forEach(prompt => prompt.matched = false)
+
     setCurrentPrompts(tempPrompts)
-  }
+}
 
   return (
     <>
@@ -106,11 +116,19 @@ const Prompts = ({ items, onClick }) => {
     onClick(item)
   }
 
+  const className = () => {
+    if (selectedIndex === null) {
+      return 'text-item'
+    } else {
+      return 'text-item selected'
+    }
+  }
+
   return (
     items.map((item, index) => (
       <span 
         key={index}
-        className={`text-item ${selectedIndex === index ? 'selected' : ''}`}
+        className={`text-item ${selectedIndex === index ? 'selected' : ''} ${item.matched ? 'matched' : ''}`}
         onClick={() => handleClick(item, index)}
       >
         {item.prompt}
