@@ -6,6 +6,7 @@ function App() {
   const [currentPrompts, setCurrentPrompts] = useState([])
   const [clickedImage, setClickedImage] = useState(null)
   const [clickedPrompt, setClickedPrompt] = useState(null)
+  const [currentMatches, setCurrentMatches] = useState([])
 
   useEffect(() => {
     if (clickedImage === null || clickedPrompt === null) {
@@ -15,11 +16,7 @@ function App() {
     if (clickedImage === clickedPrompt) {
       alert('You win!')
       
-      // set prompt.matched = true
-      const tempPrompts = [...currentPrompts]
-      const matchedIndex = tempPrompts.findIndex(prompt => prompt === clickedPrompt)
-      tempPrompts[matchedIndex].matched = true
-      setCurrentPrompts(tempPrompts)
+      setCurrentMatches((prev) => [...prev, clickedImage])
 
       setClickedImage(null)
       setClickedPrompt(null)
@@ -39,14 +36,16 @@ function App() {
       tempPrompts.push(prompts[randomIndex])
     }
 
-    tempPrompts.forEach(prompt => prompt.matched = false)
-
     setCurrentPrompts(tempPrompts)
+
+    // reset matched
+    setCurrentMatches([])
 }
 
   return (
     <>
       <Columns items={currentPrompts}
+        currentMatches={currentMatches}
         clickedImage={clickedImage}
         setClickedImage={setClickedImage}
         clickedPrompt={clickedPrompt}
@@ -59,7 +58,7 @@ function App() {
 
 export default App
 
-const Columns = ({ items, clickedImage, setClickedImage, clickedPrompt, setClickedPrompt }) => {
+const Columns = ({ items, currentMatches, clickedImage, setClickedImage, clickedPrompt, setClickedPrompt }) => {
 
   const handleImageClick = (item) => {
     console.log('clicked image', item)
@@ -75,15 +74,15 @@ const Columns = ({ items, clickedImage, setClickedImage, clickedPrompt, setClick
   return(
   <div className="container">
     <div className="image-column">
-        <Images items={items} clickeditem={clickedImage} onClick={handleImageClick}/>
+        <Images items={items} currentMatches={currentMatches} clickeditem={clickedImage} onClick={handleImageClick}/>
     </div>
     <div className="text-column">
-        <Prompts items={items} clickeditem={clickedPrompt} onClick={handlePromptClick}/>
+        <Prompts items={items} currentMatches={currentMatches} clickeditem={clickedPrompt} onClick={handlePromptClick}/>
     </div>
   </div>
 )};
 
-const Images = ({ items, onClick }) => {
+const Images = ({ items, currentMatches, onClick }) => {
 
   const [randomizedItems, setRandomizedItems] = useState([])
 
@@ -107,15 +106,14 @@ const Images = ({ items, onClick }) => {
         key={index}
         src={item.url}
         alt={item}
-        // className="image-item"
-        className={`image-item ${selectedIndex === index ? 'selected' : ''} ${item.matched ? 'matched' : ''}`}
+        className={`image-item ${selectedIndex === index ? 'selected' : ''} ${currentMatches.includes(item) ? 'matched' : ''}`}
         onClick={() => handleClick(item, index)}
       />
     ))
   )
 }
 
-const Prompts = ({ items, onClick }) => {
+const Prompts = ({ items, currentMatches, onClick }) => {
 
   const [selectedIndex, setSelectedIndex] = useState(null)
 
@@ -128,7 +126,7 @@ const Prompts = ({ items, onClick }) => {
     items.map((item, index) => (
       <span 
         key={index}
-        className={`text-item ${selectedIndex === index ? 'selected' : ''} ${item.matched ? 'matched' : ''}`}
+        className={`text-item ${selectedIndex === index ? 'selected' : ''} ${currentMatches.includes(item) ? 'matched' : ''}`}
         onClick={() => handleClick(item, index)}
       >
         {item.prompt}
