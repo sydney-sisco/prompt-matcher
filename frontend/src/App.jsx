@@ -88,7 +88,7 @@ const Images = ({ items, onClick }) => {
     randomizedItems.map((item, index) => (
       <img
         key={index}
-        src={`https://magic-8-ball.sfo3.cdn.digitaloceanspaces.com/${item}`}
+        src={item.url}
         alt={item}
         className="image-item"
         onClick={() => onClick(item)}
@@ -113,7 +113,7 @@ const Prompts = ({ items, onClick }) => {
         className={`text-item ${selectedIndex === index ? 'selected' : ''}`}
         onClick={() => handleClick(item, index)}
       >
-        {item.replaceAll('_', ' ').replace('.png', '')}
+        {item.prompt}
       </span>
     ))
   )
