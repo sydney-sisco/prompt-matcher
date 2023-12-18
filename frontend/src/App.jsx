@@ -6,7 +6,49 @@ function App() {
   const [currentPrompts, setCurrentPrompts] = useState([])
   const [clickedImage, setClickedImage] = useState(null)
   const [clickedPrompt, setClickedPrompt] = useState(null)
+  
+  // game state
   const [currentMatches, setCurrentMatches] = useState([])
+  const [level, setLevel] = useState(1)
+  const [lives, setLives] = useState(3)
+
+  useEffect(() => {
+    getPrompts()
+  }
+  , [])
+
+  useEffect(() => {
+    if (currentMatches.length === 4) {
+      alert('You win! Go to next level')
+      setLevel((prev) => prev + 1)
+      // setLives((prev) => prev + 1)
+      setCurrentMatches([])
+      getPrompts()
+    }
+  }
+  , [currentMatches])
+
+  useEffect(() => {
+    if (level === 4) {
+      alert('You win the game!')
+      setLevel(1)
+      setLives(3)
+      setCurrentMatches([])
+      getPrompts()
+    }
+  }
+  , [level])
+
+  useEffect(() => {
+    if (lives === 0) {
+      alert('Game over!')
+      setLevel(1)
+      setLives(3)
+      setCurrentMatches([])
+
+      getPrompts()
+    }
+  }, [lives])
 
   useEffect(() => {
     if (clickedImage === null || clickedPrompt === null) {
@@ -14,16 +56,18 @@ function App() {
     }
 
     if (clickedImage === clickedPrompt) {
-      alert('You win!')
+      alert('Correct!')
       
       setCurrentMatches((prev) => [...prev, clickedImage])
 
       setClickedImage(null)
       setClickedPrompt(null)
     } else {
-      alert('You lose!')
+      alert('Wrong!')
       setClickedImage(null)
       setClickedPrompt(null)
+
+      setLives((prev) => prev - 1)
     }
   }
   , [clickedImage, clickedPrompt])
@@ -44,6 +88,7 @@ function App() {
 
   return (
     <>
+      <Status level={level} lives={lives} />
       <Columns items={currentPrompts}
         currentMatches={currentMatches}
         clickedImage={clickedImage}
@@ -57,6 +102,14 @@ function App() {
 }
 
 export default App
+
+const Status = ({ level, lives }) => (
+  <div>
+    <span>Level: {level}</span>
+    <br />
+    <span>Lives: {lives}</span>
+  </div>
+)
 
 const Columns = ({ items, currentMatches, clickedImage, setClickedImage, clickedPrompt, setClickedPrompt }) => {
 
