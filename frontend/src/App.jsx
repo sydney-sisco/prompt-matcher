@@ -6,7 +6,7 @@ function App() {
   const [currentPrompts, setCurrentPrompts] = useState([])
   const [clickedImage, setClickedImage] = useState(null)
   const [clickedPrompt, setClickedPrompt] = useState(null)
-  
+
   // game state
   const [currentMatches, setCurrentMatches] = useState([])
   const [level, setLevel] = useState(1)
@@ -15,7 +15,7 @@ function App() {
   useEffect(() => {
     getPrompts()
   }
-  , [])
+    , [])
 
   useEffect(() => {
     if (currentMatches.length === 4) {
@@ -26,7 +26,7 @@ function App() {
       getPrompts()
     }
   }
-  , [currentMatches])
+    , [currentMatches])
 
   useEffect(() => {
     if (level === 4) {
@@ -37,7 +37,7 @@ function App() {
       getPrompts()
     }
   }
-  , [level])
+    , [level])
 
   useEffect(() => {
     if (lives === 0) {
@@ -57,7 +57,7 @@ function App() {
 
     if (clickedImage === clickedPrompt) {
       alert('Correct!')
-      
+
       setCurrentMatches((prev) => [...prev, clickedImage])
 
       setClickedImage(null)
@@ -70,7 +70,7 @@ function App() {
       setLives((prev) => prev - 1)
     }
   }
-  , [clickedImage, clickedPrompt])
+    , [clickedImage, clickedPrompt])
 
   const getPrompts = () => {
     // get 4 random prompts
@@ -84,56 +84,40 @@ function App() {
 
     // reset matched
     setCurrentMatches([])
-}
+  }
 
   return (
-    <>
-      <Status level={level} lives={lives} />
-      <Columns items={currentPrompts}
+    <div className="container">
+      <Header />
+      {/* <Columns items={currentPrompts}
         currentMatches={currentMatches}
         clickedImage={clickedImage}
         setClickedImage={setClickedImage}
         clickedPrompt={clickedPrompt}
         setClickedPrompt={setClickedPrompt}
-      />
-      <button onClick={getPrompts}>Get Prompts</button>
-    </>
+      /> */}
+      <Images items={currentPrompts} currentMatches={currentMatches} clickeditem={clickedImage} onClick={setClickedImage} />
+      <Prompts items={currentPrompts} currentMatches={currentMatches} clickeditem={clickedPrompt} onClick={setClickedPrompt} />
+      <Status level={level} lives={lives} />
+      {/* <button onClick={getPrompts}>Get Prompts</button> */}
+    </div>
   )
 }
 
 export default App
 
-const Status = ({ level, lives }) => (
-  <div>
-    <span>Level: {level}</span>
-    <br />
-    <span>Lives: {lives}</span>
+const Header = () => (
+  <div className="header">
+    <h1>game</h1>
   </div>
 )
 
-const Columns = ({ items, currentMatches, clickedImage, setClickedImage, clickedPrompt, setClickedPrompt }) => {
-
-  const handleImageClick = (item) => {
-    console.log('clicked image', item)
-    setClickedImage(item)
-  }
-
-  const handlePromptClick = (item) => {
-    console.log('clicked prompt', item)
-    setClickedPrompt(item)
-  }
-
-
-  return(
-  <div className="container">
-    <div className="image-column">
-        <Images items={items} currentMatches={currentMatches} clickeditem={clickedImage} onClick={handleImageClick}/>
-    </div>
-    <div className="text-column">
-        <Prompts items={items} currentMatches={currentMatches} clickeditem={clickedPrompt} onClick={handlePromptClick}/>
-    </div>
+const Status = ({ level, lives }) => (
+  <div className='status-container'>
+    <div>Level: {level} / 3</div>
+    <div>Lives: {lives} / 3</div>
   </div>
-)};
+)
 
 const Images = ({ items, currentMatches, onClick }) => {
 
@@ -149,20 +133,23 @@ const Images = ({ items, currentMatches, onClick }) => {
   const [selectedIndex, setSelectedIndex] = useState(null)
 
   const handleClick = (item, index) => {
+    console.log('clicked image', item)
     setSelectedIndex(index)
     onClick(item)
   }
 
-  return(
-    randomizedItems.map((item, index) => (
-      <img
-        key={index}
-        src={item.url}
-        alt={item}
-        className={`image-item ${selectedIndex === index ? 'selected' : ''} ${currentMatches.includes(item) ? 'matched' : ''}`}
-        onClick={() => handleClick(item, index)}
-      />
-    ))
+  return (
+    <div className="images-container">
+      {randomizedItems.map((item, index) => (
+        <img
+          key={index}
+          src={item.url}
+          alt={item}
+          className={`image-item ${selectedIndex === index ? 'selected' : ''} ${currentMatches.includes(item) ? 'matched' : ''}`}
+          onClick={() => handleClick(item, index)}
+        />
+      ))}
+    </div>
   )
 }
 
@@ -171,19 +158,24 @@ const Prompts = ({ items, currentMatches, onClick }) => {
   const [selectedIndex, setSelectedIndex] = useState(null)
 
   const handleClick = (item, index) => {
+    console.log('clicked prompt', item)
     setSelectedIndex(index)
     onClick(item)
   }
 
   return (
-    items.map((item, index) => (
-      <span 
-        key={index}
-        className={`text-item ${selectedIndex === index ? 'selected' : ''} ${currentMatches.includes(item) ? 'matched' : ''}`}
-        onClick={() => handleClick(item, index)}
-      >
-        {item.prompt}
-      </span>
-    ))
+    <div className="prompts-container">
+      {
+        items.map((item, index) => (
+          <span
+            key={index}
+            className={`text-item ${selectedIndex === index ? 'selected' : ''} ${currentMatches.includes(item) ? 'matched' : ''}`}
+            onClick={() => handleClick(item, index)}
+          >
+            {item.prompt}
+          </span>
+        ))
+      }
+    </div>
   )
 }

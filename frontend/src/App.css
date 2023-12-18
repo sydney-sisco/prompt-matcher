@@ -1,39 +1,8 @@
 #root {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 10px;
   text-align: center;
-}
-
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
 }
 
 html,
@@ -47,40 +16,56 @@ body {
 
 .container {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   height: 90vh;
+
+  max-width: 400px;
 }
 
-.image-column,
-.text-column {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
-  height: 90%;
+.header h1 {
+  font-size: 3rem;
+  margin: 0;
 }
+
+.images-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto auto;
+    gap: 10px;
+    width: 100%;
+    /* max-width: 400px; */
+    /* margin: 0 auto; */
+    justify-items: center;
+  }
 
 .image-item {
-  max-height: 20%;
-  object-fit: contain;
+  max-width: 100%;
+  border: 1px solid transparent;
 }
 
-.image-item.selected {
+/* .image-item.selected {
   border: 2px solid red;
-}
+} */
 
 .image-item.matched {
   border: 2px solid green;
 }
 
-.text-item {
-  font-size: 1rem;
+.prompts-container {
+  display: flex;
+  flex-direction: column;
 }
 
-.text-item.selected {
-  border: 2px solid red;
+.text-item {
+  font-size: 1rem;
+  border: 1px solid #555;
 }
+
+/* .text-item.selected {
+  border: 2px solid red;
+} */
 
 .text-item.matched {
   border: 2px solid green;
@@ -88,12 +73,18 @@ body {
 
 .image-item,
 .text-item {
-  border: 1px solid transparent;
-  transition: border 300ms;
   
+  transition: border 300ms;
 }
 
 .image-item:hover, .text-item:hover {
   border: 1px solid #ccc;
   cursor: pointer;
+}
+
+.status-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
 }
