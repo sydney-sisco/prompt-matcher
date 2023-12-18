@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import futureLogo from '/future.svg'
 import './App.css'
 import prompts from './prompts.json';
 
@@ -38,8 +37,10 @@ function App() {
   return (
     <>
       <Columns items={currentPrompts}
-        setClickedImageIndex={setClickedImage}
-        setClickedPromptIndex={setClickedPrompt}
+        clickedImage={clickedImage}
+        setClickedImage={setClickedImage}
+        clickedPrompt={clickedPrompt}
+        setClickedPrompt={setClickedPrompt}
       />
       <button onClick={getPrompts}>Get Prompts</button>
     </>
@@ -48,26 +49,26 @@ function App() {
 
 export default App
 
-const Columns = ({ items, setClickedImageIndex, setClickedPromptIndex }) => {
+const Columns = ({ items, clickedImage, setClickedImage, clickedPrompt, setClickedPrompt }) => {
 
-  const handleImageClick = (itemIndex) => {
-    console.log('clicked', itemIndex)
-    setClickedImageIndex(itemIndex)
+  const handleImageClick = (item) => {
+    console.log('clicked image', item)
+    setClickedImage(item)
   }
 
-  const handlePromptClick = (itemIndex) => {
-    console.log('clicked', itemIndex)
-    setClickedPromptIndex(itemIndex)
+  const handlePromptClick = (item) => {
+    console.log('clicked prompt', item)
+    setClickedPrompt(item)
   }
 
 
   return(
   <div className="container">
     <div className="image-column">
-        <Images items={items} onClick={handleImageClick}/>
+        <Images items={items} clickeditem={clickedImage} onClick={handleImageClick}/>
     </div>
     <div className="text-column">
-        <Prompts items={items} onClick={handlePromptClick}/>
+        <Prompts items={items} clickeditem={clickedPrompt} onClick={handlePromptClick}/>
     </div>
   </div>
 )};
@@ -96,12 +97,24 @@ const Images = ({ items, onClick }) => {
   )
 }
 
-const Prompts = ({ items, onClick }) => (
-  items.map((item, index) => (
-    <span key={index} className="text-item"
-      onClick={() => onClick(item)}
-    >
-      {item.replaceAll('_', ' ').replace('.png', '')}
-    </span>
-  ))
-)
+const Prompts = ({ items, onClick }) => {
+
+  const [selectedIndex, setSelectedIndex] = useState(null)
+
+  const handleClick = (item, index) => {
+    setSelectedIndex(index)
+    onClick(item)
+  }
+
+  return (
+    items.map((item, index) => (
+      <span 
+        key={index}
+        className={`text-item ${selectedIndex === index ? 'selected' : ''}`}
+        onClick={() => handleClick(item, index)}
+      >
+        {item.replaceAll('_', ' ').replace('.png', '')}
+      </span>
+    ))
+  )
+}
