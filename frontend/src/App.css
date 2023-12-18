@@ -66,6 +66,14 @@ body {
   object-fit: contain;
 }
 
+.image-item.selected {
+  border: 2px solid red;
+}
+
+.image-item.matched {
+  border: 2px solid green;
+}
+
 .text-item {
   font-size: 1rem;
 }

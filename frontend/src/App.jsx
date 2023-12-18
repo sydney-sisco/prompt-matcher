@@ -94,14 +94,22 @@ const Images = ({ items, onClick }) => {
     setRandomizedItems(tempItems)
   }, [items])
 
+  const [selectedIndex, setSelectedIndex] = useState(null)
+
+  const handleClick = (item, index) => {
+    setSelectedIndex(index)
+    onClick(item)
+  }
+
   return(
     randomizedItems.map((item, index) => (
       <img
         key={index}
         src={item.url}
         alt={item}
-        className="image-item"
-        onClick={() => onClick(item)}
+        // className="image-item"
+        className={`image-item ${selectedIndex === index ? 'selected' : ''} ${item.matched ? 'matched' : ''}`}
+        onClick={() => handleClick(item, index)}
       />
     ))
   )
@@ -114,14 +122,6 @@ const Prompts = ({ items, onClick }) => {
   const handleClick = (item, index) => {
     setSelectedIndex(index)
     onClick(item)
-  }
-
-  const className = () => {
-    if (selectedIndex === null) {
-      return 'text-item'
-    } else {
-      return 'text-item selected'
-    }
   }
 
   return (
