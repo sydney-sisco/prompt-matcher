@@ -68,10 +68,17 @@ body {
   justify-content: center;
   align-items: center;
   font-size: 5rem;
-  color: red;
   font-weight: bold;
 
   pointer-events: none;
+}
+
+.error {
+  color: red;
+}
+
+.success {
+  color: green;
 }
 
 .hidden {

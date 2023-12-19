@@ -65,7 +65,7 @@ function App() {
     }
 
     if (clickedImage === clickedPrompt) {
-      alert('Correct!')
+      // alert('Correct!')
       setIsInputCorrectAndReset(true)
       setCurrentMatches((prev) => [...prev, clickedImage])
 
@@ -124,8 +124,6 @@ const Status = ({ level, lives }) => (
 const Images = ({ items, currentMatches, isInputCorrect, onClick }) => {
 
   const [randomizedItems, setRandomizedItems] = useState([])
-  const [statusText, setStatusText] = useState('X')
-  // const [lastClicked, setLastClicked] = useState(null)
 
   useEffect(() => {
     console.log('items', items);
@@ -153,7 +151,8 @@ const Images = ({ items, currentMatches, isInputCorrect, onClick }) => {
             className={`image-item ${selectedIndex === index ? 'selected' : ''} ${currentMatches.includes(item) ? 'matched' : ''}`}
             onClick={() => handleClick(item, index)}
           />
-          <div className={`image-item-overlay ${index === selectedIndex && isInputCorrect===false ? '' : 'hidden'}`}>{statusText}</div>
+          <div className={`image-item-overlay error ${index === selectedIndex && isInputCorrect===false ? '' : 'hidden'}`}>X</div>
+          <div className={`image-item-overlay success ${currentMatches.includes(item) ? '' : 'hidden'}`}>✓</div>
         </div>
       ))}
     </div>
