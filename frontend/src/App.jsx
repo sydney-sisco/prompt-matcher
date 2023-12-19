@@ -11,6 +11,15 @@ function App() {
   const [currentMatches, setCurrentMatches] = useState([])
   const [level, setLevel] = useState(1)
   const [lives, setLives] = useState(3)
+  const [isInputCorrect, setIsInputCorrect] = useState(null)
+
+  // fn to set isInputCorrect and reset after 1s
+  const setIsInputCorrectAndReset = (bool) => {
+    setIsInputCorrect(bool)
+    setTimeout(() => {
+      setIsInputCorrect(null)
+    }, 1000)
+  }
 
   useEffect(() => {
     getPrompts()
@@ -57,13 +66,13 @@ function App() {
 
     if (clickedImage === clickedPrompt) {
       alert('Correct!')
-
+      setIsInputCorrectAndReset(true)
       setCurrentMatches((prev) => [...prev, clickedImage])
 
       setClickedImage(null)
       setClickedPrompt(null)
     } else {
-      alert('Wrong!')
+      setIsInputCorrectAndReset(false)
       setClickedImage(null)
       setClickedPrompt(null)
 
@@ -89,15 +98,8 @@ function App() {
   return (
     <div className="container">
       <Header />
-      {/* <Columns items={currentPrompts}
-        currentMatches={currentMatches}
-        clickedImage={clickedImage}
-        setClickedImage={setClickedImage}
-        clickedPrompt={clickedPrompt}
-        setClickedPrompt={setClickedPrompt}
-      /> */}
-      <Images items={currentPrompts} currentMatches={currentMatches} clickeditem={clickedImage} onClick={setClickedImage} />
-      <Prompts items={currentPrompts} currentMatches={currentMatches} clickeditem={clickedPrompt} onClick={setClickedPrompt} />
+      <Images items={currentPrompts} currentMatches={currentMatches} isInputCorrect={isInputCorrect} clickeditem={clickedImage} onClick={setClickedImage} />
+      <Prompts items={currentPrompts} currentMatches={currentMatches} isInputCorrect={isInputCorrect} clickeditem={clickedPrompt} onClick={setClickedPrompt} />
       <Status level={level} lives={lives} />
       {/* <button onClick={getPrompts}>Get Prompts</button> */}
     </div>
@@ -119,9 +121,11 @@ const Status = ({ level, lives }) => (
   </div>
 )
 
-const Images = ({ items, currentMatches, onClick }) => {
+const Images = ({ items, currentMatches, isInputCorrect, onClick }) => {
 
   const [randomizedItems, setRandomizedItems] = useState([])
+  const [statusText, setStatusText] = useState('X')
+  // const [lastClicked, setLastClicked] = useState(null)
 
   useEffect(() => {
     console.log('items', items);
@@ -141,19 +145,22 @@ const Images = ({ items, currentMatches, onClick }) => {
   return (
     <div className="images-container">
       {randomizedItems.map((item, index) => (
-        <img
-          key={index}
-          src={item.url}
-          alt={item}
-          className={`image-item ${selectedIndex === index ? 'selected' : ''} ${currentMatches.includes(item) ? 'matched' : ''}`}
-          onClick={() => handleClick(item, index)}
-        />
+        <div className='image-container'>
+          <img
+            key={index}
+            src={item.url}
+            alt={item}
+            className={`image-item ${selectedIndex === index ? 'selected' : ''} ${currentMatches.includes(item) ? 'matched' : ''}`}
+            onClick={() => handleClick(item, index)}
+          />
+          <div className={`image-item-overlay ${index === selectedIndex && isInputCorrect===false ? '' : 'hidden'}`}>{statusText}</div>
+        </div>
       ))}
     </div>
   )
 }
 
-const Prompts = ({ items, currentMatches, onClick }) => {
+const Prompts = ({ items, currentMatches, isInputCorrect, onClick }) => {
 
   const [selectedIndex, setSelectedIndex] = useState(null)
 
