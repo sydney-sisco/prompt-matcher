@@ -12,6 +12,7 @@ function App() {
   const [level, setLevel] = useState(1)
   const [lives, setLives] = useState(3)
   const [isInputCorrect, setIsInputCorrect] = useState(null)
+  const [statusText, setStatusText] = useState('')
 
   // fn to set isInputCorrect and reset after 1s
   const setIsInputCorrectAndReset = (bool) => {
@@ -21,14 +22,24 @@ function App() {
     }, 1000)
   }
 
+  // fn to set status text and reset after 1s
+  const setStatusTextAndReset = (text) => {
+    setStatusText(text)
+    setTimeout(() => {
+      setStatusText('')
+    }, 3000)
+  }
+
   useEffect(() => {
+    setStatusTextAndReset('Match the images to the prompts. There are 3 levels. You have 3 lives. Good luck!')
     getPrompts()
   }
     , [])
 
   useEffect(() => {
     if (currentMatches.length === 4) {
-      alert('You win! Go to next level')
+      // alert('You win! Go to next level')
+      setStatusTextAndReset('Success! Go to next level')
       setLevel((prev) => prev + 1)
       // setLives((prev) => prev + 1)
       setCurrentMatches([])
@@ -39,7 +50,8 @@ function App() {
 
   useEffect(() => {
     if (level === 4) {
-      alert('You win the game!')
+      // alert('You win the game!')
+      setStatusTextAndReset('You have won!')
       setLevel(1)
       setLives(3)
       setCurrentMatches([])
@@ -50,7 +62,8 @@ function App() {
 
   useEffect(() => {
     if (lives === 0) {
-      alert('Game over!')
+      // alert('Game over!')
+      setStatusTextAndReset('Game over!')
       setLevel(1)
       setLives(3)
       setCurrentMatches([])
@@ -98,7 +111,7 @@ function App() {
   return (
     <div className="container">
       <Header />
-      <Images items={currentPrompts} currentMatches={currentMatches} isInputCorrect={isInputCorrect} clickeditem={clickedImage} onClick={setClickedImage} />
+      <Images items={currentPrompts} currentMatches={currentMatches} isInputCorrect={isInputCorrect} clickeditem={clickedImage} statusText={statusText} onClick={setClickedImage} />
       <Prompts items={currentPrompts} currentMatches={currentMatches} isInputCorrect={isInputCorrect} clickeditem={clickedPrompt} onClick={setClickedPrompt} />
       <Status level={level} lives={lives} />
       {/* <button onClick={getPrompts}>Get Prompts</button> */}
@@ -121,7 +134,13 @@ const Status = ({ level, lives }) => (
   </div>
 )
 
-const Images = ({ items, currentMatches, isInputCorrect, onClick }) => {
+const Splash = ({text}) => {
+  return (
+    text && <div className="splash">{text}</div>
+  )
+}
+
+const Images = ({ items, currentMatches, isInputCorrect, statusText, onClick }) => {
 
   const [randomizedItems, setRandomizedItems] = useState([])
 
@@ -155,6 +174,7 @@ const Images = ({ items, currentMatches, isInputCorrect, onClick }) => {
           <div className={`image-item-overlay success ${currentMatches.includes(item) ? '' : 'hidden'}`}>✓</div>
         </div>
       ))}
+      <Splash text={statusText} />
     </div>
   )
 }
